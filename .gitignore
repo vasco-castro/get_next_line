@@ -50,3 +50,18 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+#Custom ignores
+ex*.c
+*.out
+main.c
+*.vscode
+*.swp
+old_*.c
+*.gch
+*.o
+*.a
+
+test
+bonus
+.bonus
