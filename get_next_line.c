@@ -6,7 +6,7 @@
 /*   By: vsoares- <vsoares-@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:13:48 by vsoares-          #+#    #+#             */
-/*   Updated: 2024/11/25 23:02:21 by vsoares-         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:23:29 by vsoares-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,18 @@
 
 char	*get_next_line(int fd)
 {
-	static char	buf[BUFFER_SIZE /* + 1 */];
+	static char	buf[FOPEN_MAX][BUFFER_SIZE + 1];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || fd >= FOPEN_MAX || BUFFER_SIZE < 1)
 		return (NULL);
-
-	// printf("|BUFFER: %s|\n", buf);
-	line = malloc(BUFFER_SIZE + 2);
-	if (!line)
-		return (NULL);
-	while (read(fd, buf, BUFFER_SIZE) > 0)
+	line = NULL;
+	while (buf[fd][0] || read(fd, buf[fd], BUFFER_SIZE) > 0)
 	{
-		line = str_append(line, buf);
-		// printf("|BUFFER: %s|\n", buf);
+		line = str_append(line, buf[fd]);
 		if (!line)
 			return (NULL);
-		if (check_nl(line))
+		if (line[line_len(line)] == '\n')
 			return (line);
 	}
 	return (line);
